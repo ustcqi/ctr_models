@@ -1,0 +1,59 @@
+2020-06-15 16:52:25,069 - INFO - FLAGS : 
+src.flags:
+  --ad_input_length: ad single feature length
+    (default: '6')
+    (an integer)
+  --ad_layer1_units: (no help available)
+    (default: '256')
+    (an integer)
+  --ad_layer2_units: (no help available)
+    (default: '128')
+    (an integer)
+  --alpha: loss weight for joint training
+    (default: '2.0')
+    (a number)
+  --cross_input_length: cross feature length
+    (default: '239')
+    (an integer)
+  --embedding_dim: embedding dimension
+    (default: '8')
+    (an integer)
+  --learning_rate: learning rate
+    (default: '0.005')
+    (a number)
+  --match_output_units: (no help available)
+    (default: '64')
+    (an integer)
+  --max_hist_click_length: industry click sequence
+    (default: '5')
+    (an integer)
+  --pred_layer1_units: (no help available)
+    (default: '512')
+    (an integer)
+  --pred_layer2_units: (no help available)
+    (default: '256')
+    (an integer)
+  --pred_layer3_units: (no help available)
+    (default: '128')
+    (an integer)
+  --user_input_length: user single feature length
+    (default: '116')
+    (an integer)
+  --user_layer1_units: (no help available)
+    (default: '256')
+    (an integer)
+  --user_layer2_units: (no help available)
+    (default: '128')
+    (an integer)
+  --vocab_size: embedding table vocab size
+    (default: '5000000')
+    (an integer)
+
+absl.flags:
+  --flagfile: Insert flag definitions from the given file into the command line.
+    (default: '')
+  --undefok: comma-separated list of flag names that it is okay to specify on the command line even if the program does not define a flag with that name.  IMPORTANT: flags in this list that have
+    arguments MUST use the --flag=value format.
+    (default: ''), train_params : {'shuffle_buffer_size': 800000, 'num_parallel_calls': 16, 'epoch': 1, 'batch_size': 32, 'train_epoch': 5, 'use_match': False, 'match_only': False}
+2020-06-15 16:52:27,469 - INFO - training part ./data/part-test
+2020-06-15 16:52:54,728 - INFO - training part ./data/part-test
