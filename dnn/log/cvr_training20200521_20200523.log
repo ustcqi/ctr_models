@@ -1,0 +1,71 @@
+2020-06-21 19:25:23,462 - INFO - FLAGS : 
+src.flags:
+  --ad_input_length: ad single feature length
+    (default: '6')
+    (an integer)
+  --ad_layer1_units: (no help available)
+    (default: '256')
+    (an integer)
+  --ad_layer2_units: (no help available)
+    (default: '128')
+    (an integer)
+  --alpha: loss weight for joint training
+    (default: '2.0')
+    (a number)
+  --cross_input_length: cross feature length
+    (default: '239')
+    (an integer)
+  --embedding_dim: embedding dimension
+    (default: '8')
+    (an integer)
+  --learning_rate: learning rate
+    (default: '0.005')
+    (a number)
+  --match_output_units: (no help available)
+    (default: '64')
+    (an integer)
+  --pred_layer1_units: (no help available)
+    (default: '512')
+    (an integer)
+  --pred_layer2_units: (no help available)
+    (default: '256')
+    (an integer)
+  --pred_layer3_units: (no help available)
+    (default: '128')
+    (an integer)
+  --user_input_length: user single feature length
+    (default: '116')
+    (an integer)
+  --user_layer1_units: (no help available)
+    (default: '256')
+    (an integer)
+  --user_layer2_units: (no help available)
+    (default: '128')
+    (an integer)
+  --vocab_size: embedding table vocab size
+    (default: '5000000')
+    (an integer)
+
+absl.flags:
+  --flagfile: Insert flag definitions from the given file into the command line.
+    (default: '')
+  --undefok: comma-separated list of flag names that it is okay to specify on the command line even if the program does not define a flag with
+    that name.  IMPORTANT: flags in this list that have arguments MUST use the --flag=value format.
+    (default: ''), train_params : {'shuffle_buffer_size': 800000, 'num_parallel_calls': 16, 'epoch': 1, 'batch_size': 64, 'train_epoch': 1, 'use_match': False, 'match_only': True}
+2020-06-21 19:25:30,407 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200521/_SUCCESS
+2020-06-21 19:25:31,769 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200521/part-00000
+2020-06-21 19:25:46,873 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200521/part-00001
+2020-06-21 19:25:57,753 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200521/part-00002
+2020-06-21 19:26:08,669 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200521/part-00003
+2020-06-21 19:26:19,479 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200521/part-00004
+2020-06-21 19:26:30,120 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200521/part-00005
+2020-06-21 19:26:41,194 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200521/part-00006
+2020-06-21 19:26:52,379 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200521/part-00007
+2020-06-21 19:27:03,960 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200521/part-00008
+2020-06-21 19:27:43,941 - INFO - epoch 0, auc 0.7997, loss 0.2456
+2020-06-21 19:27:43,941 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200521/part-00009
+2020-06-21 19:28:00,018 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200522/_SUCCESS
+2020-06-21 19:28:00,291 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200522/part-00000
+2020-06-21 19:28:13,507 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200522/part-00001
+2020-06-21 19:28:27,437 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200522/part-00002
+2020-06-21 19:28:40,838 - INFO - training part hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d/dt=20200522/part-00003

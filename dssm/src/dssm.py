@@ -62,7 +62,7 @@ class DSSM(object):
       self.match_score = tf.nn.sigmoid(self.cosine_similarity)
 
     with tf.name_scope("loss"):
-      self.loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=self.cosine_similarity, labels=self.label)
+      self.loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=self.cosine_similarity, labels=self.label))
 
     with tf.name_scope("train"):
       self.learning_rate = tf.Variable(FLAGS.learning_rate, trainable=False)

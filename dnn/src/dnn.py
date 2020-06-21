@@ -59,7 +59,7 @@ class DNN(object):
       self.pred_score = tf.nn.sigmoid(self.pred_output)
 
     with tf.name_scope("loss"):
-      self.loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=self.pred_output, labels=self.label)
+      self.loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=self.pred_output, labels=self.label))
 
     with tf.name_scope("train"):
       self.learning_rate = tf.Variable(FLAGS.learning_rate, trainable=False)

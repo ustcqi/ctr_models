@@ -113,8 +113,8 @@ class DeepMP(object):
       self.match_score = tf.nn.sigmoid(self.cosine_similarity)
 
     with tf.name_scope("loss"):
-      self.pred_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=self.pred_output, labels=self.label)
-      self.match_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=self.cosine_similarity, labels=self.label)
+      self.pred_loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=self.pred_output, labels=self.label))
+      self.match_loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=self.cosine_similarity, labels=self.label))
       if self._params["use_match"] == True:
         self.loss = self.pred_loss + FLAGS.alpha * self.match_loss
       elif self._params["match_only"] == True:
