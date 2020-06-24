@@ -89,12 +89,48 @@ class MMOE_ESMM(object):
       self.user_flatten = tf.reshape(self.user_mask, [-1, FLAGS.user_input_length * FLAGS.embedding_dim]) 
       self.ad_flatten = tf.reshape(self.ad_mask, [-1, FLAGS.ad_input_length * FLAGS.embedding_dim])
       self.cross_flatten = tf.reshape(self.cross_mask, [-1, FLAGS.cross_input_length * FLAGS.embedding_dim])
+
+    with tf.name_scope("input"):
+      self.input_length = (self.user_input_length + self.ad_input_length + self.cross_input_length + 1) * FLAGS.embedding_dim
+      self.input = tf.concat([self.user_flatten, self.ad_flatten, self.cross_flatten, self.ctr_attention_output], axis=1)
+      self.input = tf.reshape(self.ctr_input, [-1, (FLAGS.user_input_length + FLAGS.ad_input_length + FLAGS.cross_input_length + 1) * FLAGS.embedding_dim])
+
+    with tf.name_scope("experts"):
+      # 设置 3 个 expert, input * expert, [None, input_length] * [input_length, expert_units] => [None, expert_units]
+      self.expert1 = tf.Variable(tf.glorot_uniform_initializer()((self.input_length, FLAGS.expert_units)), name="expert1")
+      self.expert2 = tf.Variable(tf.glorot_uniform_initializer()((self.input_length, FLAGS.expert_units)), name="expert2")
+      self.expert2 = tf.Variable(tf.glorot_uniform_initializer()((self.input_length, FLAGS.expert_units)), name="expert3")
+
+    with tf.name_scope("gates"):
+      # gate_num = task_num
+      self.gate1 = tf.Variabel(tf.glorot_uniform_initializer()((self.input_length, FLAGS.expert_units)), name="gate1")
+      self.gate2 = tf.Variabel(tf.glorot_uniform_initializer()((self.input_length, FLAGS.expert_units)), name="gate2")
+
+    with tf.name_scope("mmoe"):
+      # [None, input_length] * [input_length, expert_units] => [None, expert_units]
+      self.gate1_output = tf.nn.softmax(tf.matmul(self.input, self.gate1))
+      self.gate2_output = tf.nn.softmax(tf.matmul(self.input, self.gate2))
+     
+      # [None, input_length] * [input_length, expert_units] => [None, expert_units]
+      self.expert1_output = tf.nn.relu(tf.matmul(self.input, self.expert1))
+      self.expert2_output = tf.nn.relu(tf.matmul(self.input, self.expert2))
+      self.expert3_output = tf.nn.relu(tf.matmul(self.input, self.expert3))
+
+      # [None, expert_units] multiply [None, expert_units] => [None, expert_units]
+      self.expert1_gate1_output = tf.multiply(self.gate1_output, self.expert1_output)
+      self.expert2_gate1_output = tf.multiply(self.gate1_output, self.expert2_output)
+      self.expert3_gate1_output = tf.multiply(self.gate1_output, self.expert3_output)
+      # [ [None, expert_units], [None, expert_units], [None, expert_units] ] => element_wise_dot [None, expert_units]
+      self.task1_mmoe_output = tf.reduce_sum([self.expert1_gate1_output, self.expert2_gate1_output, self.expert3_gate1_output], axis=0)
+
+      self.expert1_gate2_output = tf.multiply(self.gate2_output, self.expert1_output)
+      self.expert2_gate2_output = tf.multiply(self.gate2_output, self.expert2_output)
+      self.expert3_gate2_output = tf.multiply(self.gate2_output, self.expert3_output)
+      self.task2_mmoe_output = tf.reduce_sum([self.expert1_gate1_output, self.expert2_gate1_output, self.expert3_gate1_output], axis=0)
     
     with tf.name_scope("ctr_net"):
-      self.ctr_input = tf.concat([self.user_flatten, self.ad_flatten, self.cross_flatten, self.ctr_attention_output], axis=1)
-      self.ctr_input = tf.reshape(self.ctr_input, [-1, (FLAGS.user_input_length + FLAGS.ad_input_length + FLAGS.cross_input_length + 1) * FLAGS.embedding_dim])
 
-      self.ctr_w1 = tf.Variable(tf.glorot_uniform_initializer()( ((FLAGS.user_input_length + FLAGS.ad_input_length + FLAGS.cross_input_length + 1) * FLAGS.embedding_dim, FLAGS.ctr_layer1_units)), name="ctr_w1")
+      self.ctr_w1 = tf.Variable(tf.glorot_uniform_initializer()( (self.input_length, FLAGS.ctr_layer1_units)), name="ctr_w1")
       self.ctr_layer1 = tf.nn.relu(tf.matmul(self.ctr_input, self.ctr_w1))
 
       self.ctr_w2 = tf.Variable(tf.glorot_uniform_initializer()((FLAGS.ctr_layer1_units, FLAGS.ctr_layer2_units)), name="ctr_w2")
@@ -109,10 +145,8 @@ class MMOE_ESMM(object):
       self.ctr_score = tf.nn.sigmoid(self.ctr_output)
 
     with tf.name_scope("cvr_net"):
-      self.cvr_input = tf.concat([self.user_flatten, self.ad_flatten, self.cross_flatten, self.cvr_attention_output], axis=1)
-      self.cvr_input = tf.reshape(self.cvr_input, [-1, (FLAGS.user_input_length + FLAGS.ad_input_length + FLAGS.cross_input_length + 1) * FLAGS.embedding_dim])
 
-      self.cvr_w1 = tf.Variable(tf.glorot_uniform_initializer()( ((FLAGS.user_input_length + FLAGS.ad_input_length + FLAGS.cross_input_length + 1) * FLAGS.embedding_dim, FLAGS.cvr_layer1_units)), name="cvr_w1")
+      self.cvr_w1 = tf.Variable(tf.glorot_uniform_initializer()( (self.input_length, FLAGS.cvr_layer1_units)), name="cvr_w1")
       self.cvr_layer1 = tf.nn.relu(tf.matmul(self.cvr_input, self.cvr_w1))
 
       self.cvr_w2 = tf.Variable(tf.glorot_uniform_initializer()((FLAGS.cvr_layer1_units, FLAGS.cvr_layer2_units)), name="cvr_w2")
