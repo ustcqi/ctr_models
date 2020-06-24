@@ -25,3 +25,7 @@ flags.DEFINE_integer('ad_layer1_units', 256, '')
 flags.DEFINE_integer('ad_layer2_units', 128, '')
 
 flags.DEFINE_integer('match_output_units', 64, '')
+
+flags.DEFINE_integer("expert_units", 128, '')
+flags.DEFINE_integer("expert_num", 3, '')
+flags.DEFINE_integer("task_num", 2 '')
