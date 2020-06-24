@@ -110,17 +110,18 @@ class MMOE_ESMM(object):
 
       # expand the dimension in dimension 1, [None, expert_num] => [None, 1, expert_num]
       self.expanded_gate1_output = tf.expand_dims(self.gate1_output, axis=1, name="expanded_gate1_output")
-      # repeat expert_units times in dimension 1
+      # repeat expert_units times in dimension 1, [None, 1, expert_num] => [None, expert_units, expert_num]
       self.expanded_gate1_output = tf.tile(self.expanded_gate1_output, [1, FLAGS.expert_units, 1], name="expanded_repeat_gate1_output")
 
       self.expanded_gate2_output = tf.expand_dims(self.gate2_output, axis=1)
       self.expanded_gate2_output = tf.tile(self.expanded_gate2_output, [1, FLAGS.expert_units, 1], name="expanded_repeat_gate2_output")
      
-      # [None, input_length] * [input_length, expert_units] => [None, expert_units, expert_num]
+      # [None, input_length] * [input_length, expert_units, expert_num] => [None, expert_units, expert_num]
       self.experts_output = tf.nn.relu(tf.matmul(self.input, self.experts), name="experts_output")
 
       # [None, expert_units, expert_num] element_wise_dot [None, expert_units, expert_num] => [None, expert_units, expert_num]
       self.experts_gate1_output = tf.multiply(self.expanded_gate1_output, self.experts_output)
+      # [None, expert_units, expert_num] => [None, expert_units]
       self.task1_mmoe_output = tf.reduce_sum(self.experts_gate1_output, axis=2, name="task1_mmoe_output")
 
       self.experts_gate2_output = tf.multiply(self.expanded_gate2_output, self.expert1_output)
