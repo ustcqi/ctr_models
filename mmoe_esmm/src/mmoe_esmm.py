@@ -117,7 +117,7 @@ class MMOE_ESMM(object):
       self.expanded_gate2_output = tf.tile(self.expanded_gate2_output, [1, FLAGS.expert_units, 1], name="expanded_repeat_gate2_output")
      
       # [None, input_length] * [input_length, expert_units, expert_num] => [None, expert_units, expert_num]
-      self.experts_output = tf.nn.relu(tf.matmul(self.input, self.experts), name="experts_output")
+      self.experts_output = tf.nn.relu(tf.tensordot(self.input, self.experts, axes=1), name="experts_output")
 
       # [None, expert_units, expert_num] element_wise_dot [None, expert_units, expert_num] => [None, expert_units, expert_num]
       self.experts_gate1_output = tf.multiply(self.expanded_gate1_output, self.experts_output)
