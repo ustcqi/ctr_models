@@ -126,7 +126,7 @@ if __name__ == '__main__':
   logging.info("FLAGS : %s, train_params : %s" % (str(FLAGS), str(train_params)))
 
   
-  hdfs_root = "hdfs://hdem21/strategy/huichuan_target_db/tb_cvr_hash_dnn_instance_d"
+  hdfs_root = ""
   train_part_list, eval_part_list = get_hdfs_parts(hdfs_root, train_start_day, train_end_day)
   train(train_part_list, eval_part_list, train_params, eval_params)
   # model_path = "./model/dnn.ckpt"
