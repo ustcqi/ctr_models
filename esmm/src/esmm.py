@@ -126,7 +126,7 @@ class ESMM(object):
       self.cvr_score = tf.nn.sigmoid(self.cvr_output)
 
     with tf.name_scope("loss"):
-      self.ctr_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=self.ctr_output, labels=self.ctr_label)
+      self.ctr_loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=self.ctr_output, labels=self.ctr_label))
       self.ctcvr_score = self.ctr_score * self.cvr_score
       self.ctcvr_loss = tf.losses.log_loss(labels=self.cvr_label, predictions=self.ctcvr_score)
       # paper alpha=1
